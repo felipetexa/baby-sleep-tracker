@@ -23,6 +23,7 @@ const Timer: React.FC = () => {
     setIsRunning(false);
     setPauseStartTime(null);
     setTotalElapsedTime(0);
+    setTimer(0);
     stopTimer();
   }
 
@@ -39,7 +40,6 @@ const Timer: React.FC = () => {
     if(isRunning) {
       interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer + 1);
-        setTotalElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
       }, 1000)
     }
   
@@ -51,8 +51,8 @@ const Timer: React.FC = () => {
   
       if (!isRunning && pauseStartTime !== null) {
         elapsedInterval = setInterval(() => {
-          const elapsedTime = Math.floor((Date.now() - pauseStartTime) / 1000); // Elapsed time in seconds
-          setTotalElapsedTime((prevElapsedTime) => prevElapsedTime + elapsedTime);
+          // const elapsedTime = Math.floor((Date.now() - pauseStartTime) / 1000); // Elapsed time in seconds
+          setTotalElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
         }, 1000);
       }
   
@@ -70,12 +70,12 @@ const Timer: React.FC = () => {
   return (
     <div>
       <h1>Timer: {formatTime(timer)}</h1>
-      {pauseStartTime !== null && (
+      {/* {pauseStartTime !== null && ( */}
         <div>
           <h2>Elapsed Time During Pause:</h2>
           <p>{formatTime(totalElapsedTime)}</p>
         </div>
-      )}
+      {/* )} */}
       <button onClick={start}>Start</button>
       <button onClick={pause}>Pause</button>
       <button onClick={stop}>Stop</button>
