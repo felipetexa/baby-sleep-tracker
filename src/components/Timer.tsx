@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react"
 import { startTimer, pauseTimer, stopTimer } from "../services/api";
 
+interface TimerProps {
+  onStop: () => void;
+}
 
-const Timer: React.FC = () => {
+const Timer: React.FC<TimerProps> = ({onStop}) => {
 
   const [timer, setTimer] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -25,6 +28,7 @@ const Timer: React.FC = () => {
     setTotalElapsedTime(0);
     setTimer(0);
     stopTimer();
+    onStop();
   }
 
   // const setTimerState = () => {
@@ -63,19 +67,24 @@ const Timer: React.FC = () => {
       const hours = Math.floor(timeInSeconds / 3600);
       const minutes = Math.floor((timeInSeconds % 3600) / 60);
       const seconds = timeInSeconds % 60;
-      return `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+
+      const formattedHours = hours.toString().padStart(2, '0');
+      const formattedMinutes = minutes.toString().padStart(2, '0');
+      const formattedSeconds = seconds.toString().padStart(2, '0');
+    
+      return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     };
   
 
   return (
     <div>
       <h1>Timer: {formatTime(timer)}</h1>
-      {/* {pauseStartTime !== null && ( */}
+      
         <div>
           <h2>Elapsed Time During Pause:</h2>
           <p>{formatTime(totalElapsedTime)}</p>
         </div>
-      {/* )} */}
+  
       <button onClick={start}>Start</button>
       <button onClick={pause}>Pause</button>
       <button onClick={stop}>Stop</button>
