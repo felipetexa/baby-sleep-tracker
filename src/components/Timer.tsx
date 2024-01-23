@@ -11,13 +11,16 @@ const Timer: React.FC<TimerProps> = ({onStop}) => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [totalElapsedTime, setTotalElapsedTime] = useState<number>(0);
   const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
+  const [showElapsedTime, setShowElapsedTime] = useState<boolean>(false);
 
   const start = () => {
     setIsRunning(true);
+    setShowElapsedTime(false);
     setPauseStartTime(null);
     startTimer();
   }
   const pause = () => {
+    setShowElapsedTime(true)
     setIsRunning(false);
     setPauseStartTime(Date.now());
     pauseTimer();
@@ -25,11 +28,15 @@ const Timer: React.FC<TimerProps> = ({onStop}) => {
   const stop = () => {
     setIsRunning(false);
     setPauseStartTime(null);
-    setTotalElapsedTime(0);
-    setTimer(0);
     stopTimer();
     onStop();
   }
+
+  const reset = () => {
+    setTotalElapsedTime(0);
+    setTimer(0);
+  }
+
 
   // const setTimerState = () => {
   //   return {
@@ -79,15 +86,17 @@ const Timer: React.FC<TimerProps> = ({onStop}) => {
   return (
     <div>
       <h1>Timer: {formatTime(timer)}</h1>
-      
+      {showElapsedTime && (        
         <div>
           <h2>Elapsed Time During Pause:</h2>
           <p>{formatTime(totalElapsedTime)}</p>
         </div>
-  
+      )}
+
       <button onClick={start}>Start</button>
       <button onClick={pause}>Pause</button>
       <button onClick={stop}>Stop</button>
+      <button onClick={reset}>Reset</button>
     </div>
   )
 }
