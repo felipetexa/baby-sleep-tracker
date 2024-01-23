@@ -21,10 +21,6 @@ export const pauseTimer = async () => {
   try {
     const response = await fetch('https://localhost:5001/api/Sleep/pause', {
       method: 'POST',
-      mode: "no-cors",
-      headers: {
-        'Content-Type': 'application/json'
-        },
     });
 
     if (response.ok) {
