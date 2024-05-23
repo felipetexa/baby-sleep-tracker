@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { startTimer, pauseTimer, stopTimer } from "../services/api";
+import { startTimer, pauseTimer, stopTimer, getSleepingData } from "../services/api";
 
 interface TimerProps {
   onStop: () => void;
@@ -30,6 +30,7 @@ const Timer: React.FC<TimerProps> = ({onStop}) => {
     setPauseStartTime(null);
     stopTimer();
     onStop();
+    getSleepingData();
   }
 
   const reset = () => {

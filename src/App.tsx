@@ -1,25 +1,55 @@
-import { useState } from 'react';
-import Report from './components/Report'
-import Timer from './components/Timer'
+import { useState, useEffect } from 'react';
+import Report from './components/Report';
+import Timer from './components/Timer';
+import { getSleepingData } from '../src/services/api';
+
+// interface SleepReportData {
+//   totalSleepHours: number;
+//   wakeUpCount: number;
+//   totalElapsedTime: number;
+// }
+interface SleepRecord {
+  id: number;
+  startTime: string;
+  pauseTime: string;
+  endTime: string;
+  wakeUpCount: number;
+}
 
 const App: React.FC = () => {
 
   const [timerStopped, setTimerStopped] = useState<boolean>(false);
+  // const [sleepReportData, setSleepReportData] = useState<SleepReportData | null>(null);
+  const [sleepRecords, setSleepRecords] = useState<SleepRecord[]>([]);
 
-  const totalSleepHours = 8;
-  const wakeUpCount = 3;
-  const totalElapsedTime = 12;
+  useEffect(() => {
+    getSleepingData()
+      .then((response) => {
+        setSleepRecords(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching sleep records:', error);
+      });
+  }, [timerStopped]);
+
 
   const handleTimerStop = () =>{
     setTimerStopped(true);
+    // getSleepingData()
+    //   .then(response => {
+    //     setSleepReportData(response.data);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error while getting sleep data:', error);
+    //   });
   }
 
   return (
     <div>
       <Timer onStop={handleTimerStop}/>
-      {timerStopped && (
-      <Report totalSleepHours={totalSleepHours} wakeUpCount={wakeUpCount} totalElapsedTime={totalElapsedTime} />
-      )}
+      {timerStopped && sleepRecords.length > 0 && (
+        <Report lastSleepRecord={sleepRecords[sleepRecords.length - 1]} />
+      )} 
     </div>
   )
 }

@@ -1,4 +1,12 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
+
+interface SleepRecord {
+  id: number;
+  startTime: string;
+  pauseTime: string;
+  endTime: string;
+  wakeUpCount: number;
+}
 
 export const startTimer = () => {
   axios.post('https://localhost:5001/api/Sleep/start')
@@ -26,5 +34,16 @@ export const stopTimer = () => {
     })
     .catch(error => {
       console.error('Error while stoping timer:', error);
+    });
+}
+
+export const getSleepingData = (): Promise<AxiosResponse<SleepRecord[]>> => {
+  return axios.get('https://localhost:5001/api/Sleep/report')
+    .then(response => {
+      return response; 
+    })
+    .catch(error => {
+      console.error('Error while retrieving data:', error);
+      throw error; 
     });
 };
