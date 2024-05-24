@@ -5,9 +5,10 @@ import { startTimer, pauseTimer, stopTimer, getSleepingData } from "../services/
 
 interface TimerProps {
   onStop: () => void;
+  onReset: () => void;
 }
 
-const Timer: React.FC<TimerProps> = ({onStop}) => {
+const Timer: React.FC<TimerProps> = ({onStop, onReset}) => {
 
   const [timer, setTimer] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -38,6 +39,7 @@ const Timer: React.FC<TimerProps> = ({onStop}) => {
   const reset = () => {
     setTotalElapsedTime(0);
     setTimer(0);
+    onReset();
   }
 
 

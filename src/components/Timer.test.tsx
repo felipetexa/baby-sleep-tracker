@@ -16,20 +16,20 @@ jest.mock('../services/api', () => ({
 
 describe('Timer component', () => {
   test('renders timer component', () => {
-    render(<Timer onStop={() => {}} />);
+    render(<Timer onStop={() => {}} onReset={() => {}} />);
     const timerElement = screen.getByText(/Timer:/i);
     expect(timerElement).toBeInTheDocument();
   });
 
   test('starts timer correctly', () => {
-    render(<Timer onStop={() => {}} />);
+    render(<Timer onStop={() => {}} onReset={() => {}} />);
     const startButton = screen.getByText(/Start/i);
     fireEvent.click(startButton);
     expect(startTimer).toHaveBeenCalledTimes(1);
   });
 
   test('pauses and shows elapsed paused timer correctly', async () => {
-    render(<Timer onStop={() => {}} />);
+    render(<Timer onStop={() => {}} onReset={() => {}} />);
     const startButton = screen.getByText(/Start/i);
 
     act(() => {
@@ -48,7 +48,7 @@ describe('Timer component', () => {
   });
 
   test('stops timer correctly', () => {
-    render(<Timer onStop={() => {}} />);
+    render(<Timer onStop={() => {}} onReset={() => {}} />);
     const startButton = screen.getByText(/Start/i);
     fireEvent.click(startButton);
 
@@ -58,7 +58,7 @@ describe('Timer component', () => {
   });
 
   test('reset timer correctly', () => {
-    render(<Timer onStop={() => {}} />);
+    render(<Timer onStop={() => {}} onReset={() => {}} />);
     const resetButton = screen.getByText(/Reset/i);
     fireEvent.click(resetButton);
   });

@@ -44,9 +44,13 @@ const App: React.FC = () => {
     //   });
   }
 
+  const handleTimerReset = () => {
+    setTimerStopped(false);
+  };
+
   return (
     <div>
-      <Timer onStop={handleTimerStop}/>
+      <Timer onStop={handleTimerStop} onReset={handleTimerReset}/>
       {timerStopped && sleepRecords.length > 0 && (
         <Report lastSleepRecord={sleepRecords[sleepRecords.length - 1]} />
       )} 
