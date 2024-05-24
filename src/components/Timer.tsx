@@ -38,6 +38,7 @@ const Timer: React.FC<TimerProps> = ({onStop, onReset}) => {
 
   const reset = () => {
     setTotalElapsedTime(0);
+    setShowElapsedTime(false);
     setTimer(0);
     onReset();
   }
