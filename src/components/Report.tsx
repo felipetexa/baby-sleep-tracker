@@ -1,5 +1,6 @@
+import React, { useState, useEffect } from 'react';
+import { getSleepingData } from '../services/api';
 
-import React from 'react';
 interface SleepRecord {
   id: number;
   startTime: string;
@@ -8,22 +9,30 @@ interface SleepRecord {
   wakeUpCount: number;
 }
 
-interface ReportProps {
-  lastSleepRecord: SleepRecord;
-} 
+const Report: React.FC = () => {
+  const [lastSleepRecord, setLastSleepRecord] = useState<SleepRecord | null>(null);
 
-const Report: React.FC<ReportProps> = ({ lastSleepRecord })  =>  {
+  useEffect(() => {
+    getSleepingData()
+      .then((response) => {
+        const sleepRecords = response.data;
+        if (sleepRecords.length > 0) {
+          setLastSleepRecord(sleepRecords[sleepRecords.length - 1]);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching sleep records:', error);
+      });
+  }, []);
 
- 
+  if (!lastSleepRecord) {
+    return <div>Loading...</div>;
+  }
 
   const calculateTotalSleepHours = (): string => {
-    console.log(lastSleepRecord)
     const startDate = new Date(lastSleepRecord.startTime);
     const endDate = new Date(lastSleepRecord.endTime);
-    console.log('Parsed start date:', startDate);
-    console.log('Parsed end date:', endDate);
     const totalMilliseconds = Math.abs(endDate.getTime() - startDate.getTime());
-    console.log('Total milliseconds:', totalMilliseconds);
 
     const hours = Math.floor(totalMilliseconds / (1000 * 60 * 60));
     const minutes = Math.floor((totalMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
@@ -42,16 +51,14 @@ const Report: React.FC<ReportProps> = ({ lastSleepRecord })  =>  {
     return Math.abs(pauseTime.getTime() - startTime.getTime()) / 1000;
   };
 
-  
   return (
     <div>
-      <h1>Report</h1> 
+      <h1>Report</h1>
       <p>Total Sleep Hours: {calculateTotalSleepHours()}</p>
       <p>Wake Up Count: {calculateWakeUpCount()}</p>
       <p>Time Spent Without Sleeping: {calculateTotalElapsedTime()}</p>
-      {/* <p>Net Sleep Hours: {calculateNetSleepHours()} hours</p> */}
     </div>
-  )
-}
+  );
+};
 
-export default Report
+export default Report;

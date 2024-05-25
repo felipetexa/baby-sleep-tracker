@@ -57,9 +57,20 @@ describe('Timer component', () => {
     expect(stopTimer).toHaveBeenCalledTimes(1);
   });
 
-  test('reset timer correctly', () => {
+  test('reset timer correctly and returns Timer to initial state', () => {
     render(<Timer onStop={() => {}} onReset={() => {}} />);
+    const startButton = screen.getByText(/Start/i);
+    fireEvent.click(startButton);
+
+    // Simulate some time passing
+    act(() => {
+      jest.advanceTimersByTime(5000); // 5 seconds
+    });
+
     const resetButton = screen.getByText(/Reset/i);
     fireEvent.click(resetButton);
+
+    // Assert the timer is reset to initial state
+    expect(screen.getByText(/Timer: 00:00:00/i)).toBeInTheDocument();
   });
 });
